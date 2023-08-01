@@ -2,7 +2,7 @@ package test
 
 //测试Gorm连接情况
 import (
-	"NetDisk/models" //导入模型包
+	"NetDisk/core/models" //导入模型包
 	"bytes"
 	"encoding/json"
 	"fmt"
