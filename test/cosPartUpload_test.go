@@ -1,8 +1,12 @@
 package test
 
 import (
+	"NetDisk/core/define"
+	"bytes"
+	"context"
 	"fmt"
 	"github.com/tencentyun/cos-go-sdk-v5"
+	"net/http"
 	"net/url"
 	"os"
 	"testing"
@@ -13,8 +17,8 @@ func TestInitPartUpload(t *testing.T) {
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
-			SecretID:  define.TencentSecretID,
-			SecretKey: define.TencentSecretKey,
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
 		},
 	})
 
@@ -33,8 +37,8 @@ func TestPartUpload(t *testing.T) {
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
-			SecretID:  define.TencentSecretID,
-			SecretKey: define.TencentSecretKey,
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
 		},
 	})
 
@@ -61,8 +65,8 @@ func TestPartUploadComplete(t *testing.T) {
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
-			SecretID:  define.TencentSecretID,
-			SecretKey: define.TencentSecretKey,
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
 		},
 	})
 

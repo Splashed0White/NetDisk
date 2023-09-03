@@ -22,7 +22,7 @@ func TestGenerateChunkFile(t *testing.T) {
 
 	// 分片个数 = 文件大小 / 分片大小
 	// 390 / 100 ==> 4, 向上取整
-	chunkNum := math.Ceil(float64(fileInfo.Size()) / chunkSize)
+	chunkNum := math.Ceil(float64(fileInfo.Size()) / float64(chunkSize))
 	// 只读方式打开文件
 	myFile, err := os.OpenFile("test.mp4", os.O_RDONLY, 0666)
 	if err != nil {
@@ -36,7 +36,7 @@ func TestGenerateChunkFile(t *testing.T) {
 		myFile.Seek(int64(i*chunkSize), 0)
 		// 最后一次的分片数据不一定是整除下来的数据
 		// 例如: 文件 120M, 第一次读了 100M, 剩下只有 20M
-		if chunkSize > fileInfo.Size()-int64(i*chunkSize) {
+		if int64(chunkSize) > fileInfo.Size()-int64(i*chunkSize) {
 			b = make([]byte, fileInfo.Size()-int64(i*chunkSize))
 		}
 		myFile.Read(b)
@@ -64,7 +64,7 @@ func TestMergeChunkFile(t *testing.T) {
 		t.Fatal(err)
 	}
 	// 分片个数 = 文件大小 / 分片大小
-	chunkNum := math.Ceil(float64(fileInfo.Size()) / chunkSize)
+	chunkNum := math.Ceil(float64(fileInfo.Size()) / float64(chunkSize))
 
 	// 合并分片
 	for i := 0; i < int(chunkNum); i++ {
