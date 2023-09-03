@@ -27,7 +27,6 @@ func NewUserFileListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 }
 
 func (l *UserFileListLogic) UserFileList(req *types.UserFileListRequest, userIdentity string) (resp *types.UserFileListReply, err error) {
-	// todo: add your logic here and delete this line
 	uf := make([]*types.UserFile, 0)
 	resp = &types.UserFileListReply{}
 	var cnt int64

@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/internal/svc"
 	"NetDisk/core/internal/types"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,7 +26,7 @@ func NewShareBasicCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *ShareBasicCreateLogic) ShareBasicCreate(req *types.ShareBasicCreateRequest, userIdentity string) (resp *types.ShareBasicCreateReply, err error) {
 	// todo: add your logic here and delete this line
-	uuid := help.GetUuid()
+	uuid := utils.GetUuid()
 	ur := new(models.UserRepository)
 	result := l.svcCtx.DB.Table("user_repository").Where("identity = ?", req.UserRepositoryIdentity).Find(ur)
 	if result.Error != nil {

@@ -25,7 +25,6 @@ func NewUserFileMoveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 }
 
 func (l *UserFileMoveLogic) UserFileMove(req *types.UserFileMoveRequest, userIdentity string) (resp *types.UserFileMoveReply, err error) {
-	// todo: add your logic here and delete this line
 	//查询文件夹是否存在
 	parentData := new(models.UserRepository)
 	result := l.svcCtx.DB.Where("identity = ? AND user_identity = ?", req.ParentIdentity, userIdentity).Find(parentData)

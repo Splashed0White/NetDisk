@@ -25,7 +25,6 @@ func NewUserFileDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Us
 }
 
 func (l *UserFileDeleteLogic) UserFileDelete(req *types.UserFileDeleteRequest, userIdentity string) (resp *types.UserFileDeleteReply, err error) {
-	// todo: add your logic here and delete this line
 	result := l.svcCtx.DB.Where("user_identity = ? AND identity = ?", userIdentity, req.Identity).Delete(new(models.UserRepository))
 	if result.Error != nil {
 		return nil, result.Error

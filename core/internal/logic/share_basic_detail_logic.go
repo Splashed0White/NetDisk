@@ -25,7 +25,6 @@ func NewShareBasicDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *ShareBasicDetailLogic) ShareBasicDetail(req *types.ShareBasicDetailRequest) (resp *types.ShareBasicDetailReply, err error) {
-	// todo: add your logic here and delete this line
 
 	//是否可以用事务进行优化
 	//对分享记录的点击次数进行+1

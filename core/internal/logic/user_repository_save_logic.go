@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/internal/svc"
 	"NetDisk/core/internal/types"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -25,9 +25,8 @@ func NewUserRepositorySaveLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *UserRepositorySaveLogic) UserRepositorySave(req *types.UserRepositorySaveRequest, UserIdentity string) (resp *types.UserRepositorySaveReply, err error) {
-	// todo: add your logic here and delete this line
 	ur := &models.UserRepository{
-		Identity:           help.GetUuid(),
+		Identity:           utils.GetUuid(),
 		UserIdentity:       UserIdentity,
 		ParentId:           req.ParentId,
 		RepositoryIdentity: req.RepositoryIdentity,

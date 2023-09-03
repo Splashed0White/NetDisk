@@ -2,9 +2,9 @@ package logic
 
 import (
 	"NetDisk/core/define"
-	"NetDisk/core/help"
 	"NetDisk/core/internal/svc"
 	"NetDisk/core/internal/types"
+	"NetDisk/core/utils"
 	"context"
 	"errors"
 	"time"
@@ -39,11 +39,11 @@ func (l *MailCodeSendRegisterLogic) MailCodeSendRegister(req *types.MailCodeSend
 		}
 	}
 	//该邮箱未被注册
-	code := help.RandCode()
+	code := utils.RandCode()
 	//存储验证码
 	l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Second*time.Duration(define.CodeExpire))
 	//发送验证码
-	err = help.MailCodeSend(req.Email, code)
+	err = utils.MailCodeSend(req.Email, code)
 	if err != nil {
 		return nil, err
 	}

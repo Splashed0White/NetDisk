@@ -1,7 +1,8 @@
-package help
+package utils
 
 import (
 	"NetDisk/core/define"
+	"bytes"
 	"context"
 	"crypto/md5"
 	"crypto/tls"
@@ -12,10 +13,13 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"golang.org/x/exp/rand"
+	"io"
 	"net/http"
 	"net/smtp"
 	"net/url"
 	"path"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -102,7 +106,7 @@ func CosUpload(r *http.Request) (string, error) {
 			// 环境变量 SECRETID 表示用户的 SecretId，登录访问管理控制台查看密钥，https://console.cloud.tencent.com/cam/capi
 			SecretID: define.CosID, // 用户的 SecretId，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参见 https://cloud.tencent.com/document/product/598/37140
 			// 环境变量 SECRETKEY 表示用户的 SecretKey，登录访问管理控制台查看密钥，https://console.cloud.tencent.com/cam/capi
-			SecretKey: define.COsKey, // 用户的 SecretKey，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参见 https://cloud.tencent.com/document/product/598/37140
+			SecretKey: define.CosKey, // 用户的 SecretKey，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参见 https://cloud.tencent.com/document/product/598/37140
 		},
 	})
 	file, fileheader, err := r.FormFile("file")
@@ -115,4 +119,79 @@ func CosUpload(r *http.Request) (string, error) {
 		panic(err)
 	}
 	return define.Url + "/" + key, nil
+}
+
+// Cos 分片上传初始化
+func CosInitPart(ext string) (string, string, error) {
+	u, _ := url.Parse(define.Url)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
+		},
+	})
+
+	key := "cloud-disk/" + GetUuid() + ext
+	v, _, err := client.Object.InitiateMultipartUpload(context.Background(), key, nil)
+	if err != nil {
+		return "", "", err
+	}
+	return key, v.UploadID, nil
+}
+
+// 分片上传
+func CosPartUpload(r *http.Request) (string, error) {
+	u, _ := url.Parse(define.Url)
+	b := &cos.BaseURL{BucketURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
+		},
+	})
+
+	key := r.PostForm.Get("key")
+	UploadID := r.PostForm.Get("upload_id")
+	partNumber, err := strconv.Atoi(r.PostForm.Get("part_number"))
+
+	if err != nil {
+		return "", err
+	}
+
+	f, _, err := r.FormFile("file")
+	if err != nil {
+		return "", nil
+	}
+
+	buf := bytes.NewBuffer(nil)
+	io.Copy(buf, f)
+
+	// opt可选
+	resp, err := client.Object.UploadPart(
+		context.Background(), key, UploadID, partNumber, bytes.NewReader(buf.Bytes()), nil,
+	)
+	if err != nil {
+		return "", nil
+	}
+	return strings.Trim(resp.Header.Get("ETag"), "\""), nil
+}
+
+// 分片上传完成
+func CosPartUploadComplete(key, uploadId string, co []cos.Object) error {
+	u, _ := url.Parse(define.Url)
+	b := &cos.BaseURL{BatchURL: u}
+	client := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  define.CosID,
+			SecretKey: define.CosKey,
+		},
+	})
+
+	opt := &cos.CompleteMultipartUploadOptions{}
+	opt.Parts = append(opt.Parts, co...)
+	_, _, err := client.Object.CompleteMultipartUpload(
+		context.Background(), key, uploadId, opt,
+	)
+	return err
 }

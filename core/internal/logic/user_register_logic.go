@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 	"errors"
 	"log"
@@ -28,7 +28,6 @@ func NewUserRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *User
 }
 
 func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *types.UserRegisterReply, err error) {
-	// todo: add your logic here and delete this line
 	//判断code是否一致
 	code, err := l.svcCtx.RDB.Get(l.ctx, req.Email).Result()
 	if err != nil {
@@ -49,9 +48,9 @@ func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterRequest) (resp *
 
 	//数据入库
 	userBasic := &models.UserBasic{
-		Identity: help.GetUuid(),
+		Identity: utils.GetUuid(),
 		Name:     req.Name,
-		Password: help.Md5(req.Password),
+		Password: utils.Md5(req.Password),
 		Email:    req.Email,
 	}
 	result = l.svcCtx.DB.Create(userBasic)

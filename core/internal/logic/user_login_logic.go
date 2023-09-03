@@ -2,8 +2,8 @@ package logic
 
 import (
 	"NetDisk/core/define"
-	"NetDisk/core/help"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 	"fmt"
 
@@ -31,21 +31,21 @@ func (l *UserLoginLogic) UserLogin(req *types.LoginRequest) (resp *types.LoginRe
 	// todo: add your logic here and delete this line
 	//1.从数据库中查询用户
 	userBasic := new(models.UserBasic)
-	//fmt.Println(help.Md5("123456"))
-	result := l.svcCtx.DB.Where("name = ? AND password = ?", req.Name, help.Md5(req.Password)).Find(userBasic)
+	//fmt.Println(utils.Md5("123456"))
+	result := l.svcCtx.DB.Where("name = ? AND password = ?", req.Name, utils.Md5(req.Password)).Find(userBasic)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		return nil, result.Error
 	}
 	//2.生成token
-	token, err := help.GenerateToken(userBasic.Id, userBasic.Identity, userBasic.Name, 20)
-	//token, err := help.GenerateToken(1, "123456", "xiaoming")
+	token, err := utils.GenerateToken(userBasic.Id, userBasic.Identity, userBasic.Name, 20)
+	//token, err := utils.GenerateToken(1, "123456", "xiaoming")
 	if err != nil {
 		return nil, err
 	}
 
 	//3.用于刷新token的token
-	refreshToken, err := help.GenerateToken(userBasic.Id, userBasic.Identity, userBasic.Name, define.TokenExpire)
+	refreshToken, err := utils.GenerateToken(userBasic.Id, userBasic.Identity, userBasic.Name, define.TokenExpire)
 	resp = new(types.LoginReply)
 	resp.Token = token
 	resp.RefreshToken = refreshToken

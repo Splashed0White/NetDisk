@@ -15,6 +15,12 @@ import (
 var configFile = flag.String("f", "etc/core-api.yaml", "the config file")
 
 func main() {
+	// @title ToDoList API
+	// @version 0.0.1
+	// @description This is a sample Server pets
+	// @securityDefinitions.apikey ApiKeyAuth
+	// @name FanOne
+	// @BasePath /api/v1
 	flag.Parse()
 
 	var c config.Config

@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/internal/svc"
 	"NetDisk/core/internal/types"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 	"errors"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -25,7 +25,6 @@ func NewUserFloderCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *UserFloderCreateLogic) UserFloderCreate(req *types.UserFloderCreateRequest, userIdentity string) (resp *types.UserFloderCreateReply, err error) {
-	// todo: add your logic here and delete this line
 	//判断当前名称下该层级是否存在
 	var cnt int
 	result := l.svcCtx.DB.Table("user_repository").Where("name = ? AND parent_id = ?", req.Name, req.ParentId).Count(&cnt)
@@ -38,7 +37,7 @@ func (l *UserFloderCreateLogic) UserFloderCreate(req *types.UserFloderCreateRequ
 
 	//创建文件夹
 	data := &models.UserRepository{
-		Identity:     help.GetUuid(),
+		Identity:     utils.GetUuid(),
 		UserIdentity: userIdentity,
 		ParentId:     req.ParentId,
 		Name:         req.Name,

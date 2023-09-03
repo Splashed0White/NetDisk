@@ -25,7 +25,6 @@ func NewUserDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserDe
 }
 
 func (l *UserDetailLogic) UserDetail(req *types.UserDetailRequest) (resp *types.UserDetailReply, err error) {
-	// todo: add your logic here and delete this line
 	resp = &types.UserDetailReply{}
 	userBasic := new(models.UserBasic)
 	result := l.svcCtx.DB.Where("identity = ?", req.Identity).Find(userBasic)

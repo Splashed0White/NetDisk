@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/internal/svc"
 	"NetDisk/core/internal/types"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"context"
 	"errors"
 
@@ -26,7 +26,6 @@ func NewShareBasicSaveLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sh
 }
 
 func (l *ShareBasicSaveLogic) ShareBasicSave(req *types.ShareBasicSaveRequest, userIdentity string) (resp *types.ShareBasicSaveReply, err error) {
-	// todo: add your logic here and delete this line
 	//获取资源详情
 	rp := new(models.Repository_pool)
 	result := l.svcCtx.DB.Where("identity = ?", req.RepositoryIdentity).Find(rp)
@@ -39,7 +38,7 @@ func (l *ShareBasicSaveLogic) ShareBasicSave(req *types.ShareBasicSaveRequest, u
 
 	//UserReposity资源保存
 	ur := &models.UserRepository{
-		Identity:           help.GetUuid(),
+		Identity:           utils.GetUuid(),
 		UserIdentity:       userIdentity,
 		ParentId:           req.ParentId,
 		RepositoryIdentity: req.RepositoryIdentity,

@@ -23,7 +23,7 @@ var CodeExpire = 100
 
 // COS环境变量
 var CosID = "AKIDkUCrbDg0A7QYUFm9LPK2aw84tW09ILSW"
-var COsKey = "yoW4QYUM5mcSJ1gEcprnmgaFF8uVwEPQ"
+var CosKey = "yoW4QYUM5mcSJ1gEcprnmgaFF8uVwEPQ"
 var Url = "https://qizhunanhai-1317611149.cos.ap-beijing.myqcloud.com" //存储桶路径
 
 // 分页的默认参数

@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"NetDisk/core/help"
 	"NetDisk/core/models"
+	"NetDisk/core/utils"
 	"crypto/md5"
 	"errors"
 	"fmt"
@@ -41,7 +41,7 @@ func FileUploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			//文件不存在,往cos中存
 			//fmt.Println("文件不存在")
 			if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-				cosPath, err := help.CosUpload(r)
+				cosPath, err := utils.CosUpload(r)
 				if err != nil {
 					return
 				}

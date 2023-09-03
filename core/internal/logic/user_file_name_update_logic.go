@@ -26,7 +26,6 @@ func NewUserFileNameUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *UserFileNameUpdateLogic) UserFileNameUpdate(req *types.UserFileNameUpdateRequest, userIdentity string) (resp *types.UserFileNameUpdateReply, err error) {
-	// todo: add your logic here and delete this line
 	//判断当前名称在该层级下是否存在
 	var cnt int
 	result := l.svcCtx.DB.Table("user_repository").Where("name = ? AND parent_id = (SELECT parent_id FROM user_repository ur WHERE ur.identity = ?)", req.Name, req.Identity).Count(&cnt)

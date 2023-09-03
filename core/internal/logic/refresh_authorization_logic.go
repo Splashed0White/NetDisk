@@ -2,7 +2,7 @@ package logic
 
 import (
 	"NetDisk/core/define"
-	"NetDisk/core/help"
+	"NetDisk/core/utils"
 	"context"
 
 	"NetDisk/core/internal/svc"
@@ -26,16 +26,15 @@ func NewRefreshAuthorizationLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 func (l *RefreshAuthorizationLogic) RefreshAuthorization(req *types.RefreshAuthorizationRequest, authorization string) (resp *types.RefreshAuthorizationReply, err error) {
-	// todo: add your logic here and delete this line
-	uc, err := help.AnalyzeToken(authorization)
+	uc, err := utils.AnalyzeToken(authorization)
 	if err != nil {
 		return nil, err
 	}
-	token, err := help.GenerateToken(uc.Id, uc.Identity, uc.Name, define.TokenExpire)
+	token, err := utils.GenerateToken(uc.Id, uc.Identity, uc.Name, define.TokenExpire)
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := help.GenerateToken(uc.Id, uc.Identity, uc.Name, define.TokenExpire)
+	refreshToken, err := utils.GenerateToken(uc.Id, uc.Identity, uc.Name, define.TokenExpire)
 	if err != nil {
 		return nil, err
 	}

@@ -152,3 +152,41 @@ type RefreshAuthorizationReply struct {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refresh_token"`
 }
+
+type FileUploadPrepareRequest struct {
+	Md5  string `json:"md5"`
+	Name string `json:"name"`
+	Ext  string `json:"ext"`
+}
+
+type FileUploadPrepareReply struct {
+	Identity string `json:"identity"`
+	UploadId string `json:"upload_id"`
+	Key      string `json:"key"`
+}
+
+type FileUploadChunkRequest struct {
+}
+
+type FileUploadChunkReply struct {
+	Etag string `json:"etag"` // MD5
+}
+
+type FileUploadChunkCompleteRequest struct {
+	Md5        string      `json:"md5"`
+	Name       string      `json:"name"`
+	Ext        string      `json:"ext"`
+	Size       int64       `json:"size"`
+	Key        string      `json:"key"`
+	UploadId   string      `json:"upload_id"`
+	CosObjects []CosObject `json:"cos_objects"`
+}
+
+type CosObject struct {
+	PartNumber int    `json:"part_number"`
+	Etag       string `json:"etag"`
+}
+
+type FileUploadChunkCompleteReply struct {
+	Identity string `json:"identity"` // 存储池identity
+}
